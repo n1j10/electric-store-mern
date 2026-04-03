@@ -88,7 +88,7 @@ async function initializeApp() {
       initState = INIT_STATE.FAILED;
       lastInitError = error;
       appInitPromise = null;
-      logErrorContext("App initialization failed", error);
+      logErrorContext("App initialization failed d", error);
       throw error;
     });
   }
@@ -98,7 +98,7 @@ async function initializeApp() {
 
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173"
+    origin: process.env.VITE_API_URL || "http://localhost:5173"
   })
 );
 app.use(express.json());
