@@ -1,0 +1,27 @@
+تقرير إصلاح خطأ النشر على Vercel
+
+عدد عوامل الخطأ: 5 عوامل رئيسية
+
+1) خطأ في vercel.json
+- المسار كان موجّهًا إلى src/server.js (ملف غير موجود) بدل server.js.
+
+2) تشغيل السيرفر بطريقة غير مناسبة لـ Vercel Serverless
+- وجود app.listen + process.exit بشكل مباشر سبّب انهيار Function في بيئة Vercel.
+
+3) ربط /api/health بتهيئة قاعدة البيانات
+- endpoint الصحة كان يفشل عند فشل Mongo، بينما المطلوب أن يكون Liveness فقط.
+
+4) Error Handler كان يخفي السبب الحقيقي
+- السيرفر كان يرجع دائمًا:
+  {"message":"Unexpected server error."}
+- بدون كود تشخيصي واضح للسبب الجذري.
+
+5) فشل تهيئة Mongo (سبب تشغيلي محتمل)
+- احتمال DNS/Network/Atlas connectivity.
+- أو نقص في متغيرات البيئة مثل MONGO_URI أو JWT_SECRET.
+
+الخلاصة:
+- Unexpected server error كان عرضًا عامًا، وليس السبب الجذري.
+- التشخيص أصبح أوضح عبر أكواد الخطأ:
+  DATABASE_UNAVAILABLE
+  SERVER_MISCONFIGURED

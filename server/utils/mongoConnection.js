@@ -2,6 +2,14 @@ const dns = require("node:dns");
 const mongoose = require("mongoose");
 
 const DEFAULT_MONGO_DNS_SERVERS = "8.8.8.8,1.1.1.1";
+const DEFAULT_MONGO_CONNECT_OPTIONS = {
+  serverSelectionTimeoutMS: 8000,
+  connectTimeoutMS: 8000
+};
+
+function withMongoTimeouts(options = {}) {
+  return { ...DEFAULT_MONGO_CONNECT_OPTIONS, ...options };
+}
 
 function getMongoDnsServers() {
   const rawValue = process.env.MONGO_DNS_SERVERS || DEFAULT_MONGO_DNS_SERVERS;
@@ -22,27 +30,45 @@ function isMongoDnsLookupError(error) {
   return /querySrv|queryA|ENOTFOUND|EAI_AGAIN/i.test(message);
 }
 
+function enrichMongoError(error, stage) {
+  if (error && typeof error === "object") {
+    error.mongoStage = stage;
+    error.mongoCode = error.code || null;
+  }
+  return error;
+}
+
 async function connectMongoWithDnsFallback(mongoUri, options = {}) {
+  const connectOptions = withMongoTimeouts(options);
+
   try {
-    await mongoose.connect(mongoUri, options);
+    await mongoose.connect(mongoUri, connectOptions);
     return;
   } catch (error) {
-    if (!mongoUri.startsWith("mongodb+srv://") || !isMongoDnsLookupError(error)) {
-      throw error;
+    const initialError = enrichMongoError(error, "initial_connect");
+
+    if (!mongoUri.startsWith("mongodb+srv://") || !isMongoDnsLookupError(initialError)) {
+      throw initialError;
     }
 
     const dnsServers = getMongoDnsServers();
     if (!dnsServers.length) {
-      throw error;
+      throw initialError;
     }
 
     dns.setServers(dnsServers);
     // eslint-disable-next-line no-console
     console.warn(
-      `MongoDB DNS lookup failed (${error.code || "unknown"}). Retrying with DNS servers: ${dnsServers.join(", ")}`
+      `MongoDB DNS lookup failed (${initialError.code || "unknown"}). Retrying with DNS servers: ${dnsServers.join(
+        ", "
+      )}`
     );
 
-    await mongoose.connect(mongoUri, options);
+    try {
+      await mongoose.connect(mongoUri, connectOptions);
+    } catch (retryError) {
+      throw enrichMongoError(retryError, "dns_retry_connect");
+    }
   }
 }
 
