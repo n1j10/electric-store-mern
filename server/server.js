@@ -42,7 +42,9 @@ app.use((error, req, res, next) => {
   console.error(error);
   return res.status(500).json({ message: "Unexpected server error." });
 });
-
+app.get("/", (req, res) => {
+  res.json({ message: "Server is live ..." });
+});
 async function start() {
   if (!mongoUri) {
     throw new Error("MONGO_URI is missing. Add it to .env.");
