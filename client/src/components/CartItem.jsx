@@ -1,11 +1,6 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-/**
- * This component represents a single item in the shopping cart. It displays the product image, name, variant, price, and quantity.
- * It also provides buttons to increase or decrease the quantity of the item, as well as a button to remove the item from the cart.
- * The component uses Tailwind CSS for styling and assumes that the `Button` component is defined elsewhere in the project.
- */
 export function CartItem({ item, onIncrease, onDecrease, onRemove }) {
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-outline-variant/50 bg-surface-container-lowest p-4 md:flex-row">
@@ -32,3 +27,5 @@ export function CartItem({ item, onIncrease, onDecrease, onRemove }) {
     </div>
   );
 }
+
+//this component represents a single item in the shopping cart. It displays the product image, name, variant, price, and quantity. It also provides buttons to increase or decrease the quantity of the item, as well as a button to remove the item from the cart. The component uses Tailwind CSS for styling and assumes that the `Button` component is defined elsewhere in the project.
