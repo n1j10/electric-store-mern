@@ -35,6 +35,8 @@ export function Home() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 md:px-6">
+
+
       <section className="mt-8 overflow-hidden rounded-2xl bg-primary-container px-6 py-12 text-white md:px-12 md:py-16">
         <p className="text-sm uppercase tracking-[0.22em] text-slate-300">Flagship Collection</p>
         <h1 className="mt-4 max-w-2xl font-manrope text-4xl font-extrabold leading-tight md:text-6xl">
@@ -89,6 +91,9 @@ export function Home() {
 
       </section>
 
+
+
+
       <section className="mt-14 overflow-hidden rounded-2xl bg-gradient-to-r from-primary-container to-slate-900 px-6 py-12 text-white md:px-10">
         <p className="text-sm uppercase tracking-[0.22em] text-slate-300">Precision Logistics</p>
         <div className="mt-3 flex flex-col justify-between gap-6 md:flex-row md:items-center">
@@ -105,6 +110,9 @@ export function Home() {
           </Link>
         </div>
       </section>
+
+
+      
     </div>
   );
 }
