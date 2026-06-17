@@ -13,7 +13,7 @@ export function Footer() {
           <h4 className="font-semibold">Explore</h4>
           <ul className="mt-3 space-y-2 text-sm text-on-surface-variant">
             <li>Collections</li>
-            <li>New Arrivals</li>
+            <li>New Arrivals </li>
             <li>Specials</li>
           </ul>
         </div>
@@ -44,3 +44,4 @@ export function Footer() {
     </footer>
   );
 }
+//1111
