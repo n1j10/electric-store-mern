@@ -131,9 +131,6 @@ async function initializeApp() {
 
 app.use(
   cors({
-<<<<<<< HEAD
-    origin: allowedOrigins
-=======
     origin(origin, callback) {
       if (isAllowedOrigin(origin)) {
         return callback(null, true);
@@ -141,7 +138,6 @@ app.use(
 
       return callback(new Error(`CORS blocked for origin: ${origin}`));
     }
->>>>>>> d17a74ef89473496ed6cb4006cbd8f1e98fc3dfa
   })
 );
 app.use(express.json());

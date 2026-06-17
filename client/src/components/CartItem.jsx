@@ -28,7 +28,4 @@ export function CartItem({ item, onIncrease, onDecrease, onRemove }) {
   );
 }
 
-<<<<<<< HEAD
-=======
 //this component represents a single item in the shopping cart. It displays the product image, name, variant, price, and quantity. It also provides buttons to increase or decrease the quantity of the item, as well as a button to remove the item from the cart. The component uses Tailwind CSS for styling and assumes that the `Button` component is defined elsewhere in the project.
->>>>>>> d17a74ef89473496ed6cb4006cbd8f1e98fc3dfa
