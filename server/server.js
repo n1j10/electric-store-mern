@@ -33,7 +33,8 @@ let lastInitError = null;
 const DEFAULT_ALLOWED_ORIGINS = [
   "http://localhost:5173",
   "http://localhost:5174",
-  "https://electric-store-test.vercel.app"
+  "https://electric-store-test.vercel.app",
+  "https://electric-store-front.vercel.app"
 ];
 
 function createServerMisconfiguredError(message) {
