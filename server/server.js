@@ -30,6 +30,11 @@ const INIT_STATE = {
 let appInitPromise;
 let initState = INIT_STATE.PENDING;
 let lastInitError = null;
+const DEFAULT_ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://electric-store-test.vercel.app"
+];
 
 function createServerMisconfiguredError(message) {
   const error = new Error(message);
@@ -76,6 +81,24 @@ function logErrorContext(label, error) {
   });
 }
 
+function getAllowedOrigins() {
+  const configuredOrigins = String(process.env.CLIENT_ORIGIN || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  return [...new Set([...DEFAULT_ALLOWED_ORIGINS, ...configuredOrigins])];
+}
+
+function isAllowedOrigin(origin) {
+  if (!origin) {
+    return true;
+  }
+
+  const allowedOrigins = getAllowedOrigins();
+  return allowedOrigins.includes(origin);
+}
+
 async function initializeApp() {
   if (!appInitPromise) {
     initState = INIT_STATE.PENDING;
@@ -108,7 +131,17 @@ async function initializeApp() {
 
 app.use(
   cors({
+<<<<<<< HEAD
     origin: allowedOrigins
+=======
+    origin(origin, callback) {
+      if (isAllowedOrigin(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    }
+>>>>>>> d17a74ef89473496ed6cb4006cbd8f1e98fc3dfa
   })
 );
 app.use(express.json());
