@@ -1,5 +1,10 @@
 const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+const rootEnvPath = path.resolve(__dirname, "../.env");
+const serverEnvPath = path.resolve(__dirname, ".env");
+const shouldOverrideLocalEnv = process.env.NODE_ENV !== "production" && process.env.VERCEL !== "1";
+
+require("dotenv").config({ path: rootEnvPath, override: shouldOverrideLocalEnv });
+require("dotenv").config({ path: serverEnvPath, override: shouldOverrideLocalEnv });
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -12,6 +17,11 @@ const adminRoutes = require("./routes/admin");
 
 const app = express();
 const port = Number(process.env.PORT || 5000);
+const configuredOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173")
+  .split(",")
+  .map((origin) => String(origin || "").trim().replace(/\/+$/, ""))
+  .filter(Boolean);
+const allowedOrigins = Array.from(new Set(["http://localhost:5173", ...configuredOrigins]));
 const INIT_STATE = {
   PENDING: "pending",
   SUCCESS: "success",
@@ -98,7 +108,7 @@ async function initializeApp() {
 
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173"
+    origin: allowedOrigins
   })
 );
 app.use(express.json());
