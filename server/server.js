@@ -96,6 +96,10 @@ function isAllowedOrigin(origin) {
     return true;
   }
 
+  if (origin.endsWith('.vercel.app')) {
+    return true;
+  }
+
   const allowedOrigins = getAllowedOrigins();
   return allowedOrigins.includes(origin);
 }
