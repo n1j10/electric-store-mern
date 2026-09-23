@@ -1,8 +1,8 @@
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const mongoose = require("mongoose");
-const Product = require("./models/Product");
-const { connectMongoWithDnsFallback } = require("./utils/mongoConnection");
+const Product = require("./src/models/Product.model");
+const { connectMongoWithDnsFallback } = require("./src/config/db");
 
 const products = [
   {

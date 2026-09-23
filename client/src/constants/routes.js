@@ -1,0 +1,1 @@
+export const ROUTES = { home: "/", products: "/products", productDetail: "/products/:id", cart: "/cart", checkout: "/checkout", orderConfirmation: "/order-confirmation/:id", adminLogin: "/admin/login", admin: "/admin" };
